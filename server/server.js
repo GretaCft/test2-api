@@ -1,5 +1,6 @@
 let express = require('express');
 let bodyParser = require('body-parser');
+const{ObjectID} = require('mongodb');
 
 let {mongoose} = require('./db/mongoose');
 let {Todo} = require('./models/todo');
@@ -30,6 +31,26 @@ Todo.find().then((todos) => {
     });
 });
 
+//GET/todos/123243
+app.get('/todos/:id',(req,res) => {
+    let id = req.params.id;
+
+    if(!ObjectID.isValid(id)){
+        console.log('ID no válido');
+        return res.status(404).send();
+    }
+    Todo.findById(id)
+    .then((todo) => {
+        if(!todo){
+            console.log('Id no encontrada');
+            return res.status(404).send();
+        }
+        res.send({todo});
+        console.log('Todo by Id',todo);
+}).catch((e) => {console.log(e);
+        res.status(400).send();
+});
+});
 
 app.listen(3000, () =>{
     console.log('Conectado al puerto 3000');
