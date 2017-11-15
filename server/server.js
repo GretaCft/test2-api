@@ -52,6 +52,25 @@ app.get('/todos/:id',(req,res) => {
 });
 });
 
+//Delete
+app.delete('/todos/:id', (req, res) => {
+    let id = req.params.id;
+    
+        if(!ObjectID.isValid(id)){
+            return res.status(404).send();
+        }
+        Todo.findByIdAndRemove(id)
+        .then((doc) => {
+            if(!doc){
+                return res.status(404).send();
+            }
+            res.status(200).send({doc});
+            console.log('Documento borrado', doc);
+    }).catch((e) => {console.log(e);
+            res.status(404).send();
+    });
+})
+
 app.listen(port, () =>{
     console.log(`Conectado al puerto ${port}`);
 })
