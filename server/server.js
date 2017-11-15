@@ -22,8 +22,16 @@ app.post('/todos', (req, res) => {
 });
 
 //GET
+app.get('/todos', (red, res)=>{
+Todo.find().then((todos) => {
+    res.send({todos});
+    }, (e) =>{
+    res.status(400).send(e);
+    });
+});
 
 
 app.listen(3000, () =>{
     console.log('Conectado al puerto 3000');
 })
+module.exports = {app};
