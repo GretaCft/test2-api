@@ -1,13 +1,13 @@
 let express = require('express');
 let bodyParser = require('body-parser');
-const{ObjectID} = require('mongodb');
 
+let {ObjectID} = require('mongodb');
 let {mongoose} = require('./db/mongoose');
 let {Todo} = require('./models/todo');
 let {User} = require('./models/users');
 
 let app =express();
-
+const port = process.env.PORT || 3000;
 app.use(bodyParser.json());
 
 //POST
@@ -52,7 +52,7 @@ app.get('/todos/:id',(req,res) => {
 });
 });
 
-app.listen(3000, () =>{
-    console.log('Conectado al puerto 3000');
+app.listen(port, () =>{
+    console.log(`Conectado al puerto ${port}`);
 })
 module.exports = {app};
