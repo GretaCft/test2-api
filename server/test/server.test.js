@@ -15,7 +15,9 @@ const todos=[{
 },
 {
     _id:new ObjectID(),
-    text:"1 test todo"
+    text:"1 test todo",
+    completed:true,
+    completedAt:123456
 }];
 
 beforeEach((done) => {
@@ -100,7 +102,80 @@ describe('GET/todos/:id', () => {
          .end(done)
     });
 });
+describe('PATCH /todos/:id', () => {
+    it('Debe actualizar un doc', (done) => {
+        let Id0 = todos[0]._id.toHexString();
+        let text = "Updated text";
 
+        request(app)
+        .patch(`/todos/${Id0}`)
+        .send({
+            completed: true,
+            text
+        })
+        .expect(200)
+        .expect((res) => {
+            expect(res.body.todo.text).toBe(text);
+            expect(res.body.todo.completed).toBe(true);
+            expect(res.body.todo.completedAt).toBeA('number');
+        })
+        .end(done);
+    });
+    it('Debe borrar completedAt si Complete es false', (done) => {
+        let Id1 = todos[1]._id.toHexString();
+        let text = "Updated text2";
+
+        request(app)
+        .patch(`/todos/${Id1}`)
+        .send({
+            completed: false,
+            text
+        })
+        .expect(200)
+        .expect((res) => {
+            expect(res.body.todo.text).toBe(text);
+            expect(res.body.todo.completed).toBe(false);
+            expect(res.body.todo.completedAt).toNotExist();
+        })
+        .end(done);
+    });
+
+});
+// describe('test delete',() => {
+//     it('should respond 200',(done) =>{
+//         let hexId = todos[1]._id.toHexString();
+      
+//         request(app)
+//         .del(`/todos/${hexId}`)
+//         .expect(200)
+//         .expect((res) => {
+//             expect(res.body.todo).toNotExist();
+//         }) 
+//         .end(done);    
+//     })
+    
+//   });
+
+describe('DELETE /todos/:id', () => {
+    it('most delete a doc', (done) => {
+        let hexId = todos[1]._id.toHexString();
+
+        request(app)
+        .del(`/todos/${hexId}`)
+        .expect(200)
+        .end((err, res) => {
+            if(err){
+                return done(err);
+            } 
+            
+        Todo.findById(hexId).then((todo) => {
+            expect(todo).toNotExist();
+            done();
+        }).catch((e) => done(e));
+    
+        });
+    });
+});
 // describe('test delete',function(){
 //     it('should respond 200',function(done){
 //         let hexId = todos[1]._id.toHexString();
@@ -110,29 +185,6 @@ describe('GET/todos/:id', () => {
 //       .end(done);
 //     })
 //   });
-// describe('DELETE /todos/:id', () => {
-//     it('most delete a doc', (done) => {
-//         let hexId = todos[1]._id.toHexString();
-
-//         request(app)
-//         .delete(`/todos/${hexId}`)
-//         .expect(200)
-//         .expect((res) => {
-//             expect(res.body.todo._id).toBe(hexId);
-//         })
-//         .end((err, res) => {
-//             if(err){
-//                 return done(err);
-//             } 
-            
-//         Todo.findById(hexId).then((todo) => {
-//             expect(todo).toNotExist();
-//             done();
-//         }).catch((e) => done(e));
-    
-//         });
-//     });
-// });
 
 // beforeEach((done) => {
 //   Todo.remove({}).then(() => {
