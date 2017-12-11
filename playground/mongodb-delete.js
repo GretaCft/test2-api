@@ -46,14 +46,14 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => {
     // });
 
     
-    db.collection('Users').findOneAndDelete({_id: new ObjectID("59e60c12d8e4f12058f4de87")})
-    .then((resulta) => {
-        if(resulta.value=== null){
-        return console.log("No hay documentos para borrar");    
-         }
-        console.log(`Se ha borrado`);
-        console.log(JSON.stringify(resulta.value, undefined, 2));
-    });
+//   db.collection('Users').findOneAndDelete({_id: new ObjectID("59e60c12d8e4f12058f4de87")})
+//     .then((resulta) => {
+//         if(resulta.value=== null){
+//         return console.log("No hay documentos para borrar");    
+//          }
+//         console.log(`Se ha borrado`);
+//         console.log(JSON.stringify(resulta.value, undefined, 2));
+//     });
 
-    db.close();
+//     db.close();
 });

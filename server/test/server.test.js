@@ -5,20 +5,25 @@ const{ObjectID} = require('mongodb');
 const {app} = require('./../server');
 const {Todo} = require('./../models/todo');
 
+if(!module.parent) {
+   app.listen();
+}
+
 const todos=[{
     _id:new ObjectID(),
-    text:"Primer test todo"
+    text:"2 test todo"
 },
 {
     _id:new ObjectID(),
-    text:"Segundo test todo"
-}]
+    text:"1 test todo"
+}];
 
 beforeEach((done) => {
     Todo.remove({}).then(() => {
         return Todo.insertMany(todos);
     }).then(() => done());
 });
+
 
 describe('POST/todos', () => {
     it('should create a new todo', (done) => {
@@ -95,3 +100,66 @@ describe('GET/todos/:id', () => {
          .end(done)
     });
 });
+
+// describe('test delete',function(){
+//     it('should respond 200',function(done){
+//         let hexId = todos[1]._id.toHexString();
+//       request(app)
+//       .del(`/todos/${hexId}`)
+//       .expect(200)
+//       .end(done);
+//     })
+//   });
+// describe('DELETE /todos/:id', () => {
+//     it('most delete a doc', (done) => {
+//         let hexId = todos[1]._id.toHexString();
+
+//         request(app)
+//         .delete(`/todos/${hexId}`)
+//         .expect(200)
+//         .expect((res) => {
+//             expect(res.body.todo._id).toBe(hexId);
+//         })
+//         .end((err, res) => {
+//             if(err){
+//                 return done(err);
+//             } 
+            
+//         Todo.findById(hexId).then((todo) => {
+//             expect(todo).toNotExist();
+//             done();
+//         }).catch((e) => done(e));
+    
+//         });
+//     });
+// });
+
+// beforeEach((done) => {
+//   Todo.remove({}).then(() => {
+//     return Todo.insertMany(todos);
+//   })
+//   .then(() =>{
+//     describe('DELETE /todos/:id', () => {
+//       it('most delete a doc', (done) => {
+//         let hexId = todos[1]._id.toHexString();
+
+//         request(app)
+//         .delete(`/todos/${hexId}`)
+//         .expect(200)
+//         .expect((res) => {
+//                 // make sure you are you getting from req.body
+//             expect(res.body.todo._id).toBe(hexId);
+//         })
+//         .end((err, res) => {
+//             if(err) return done(err);
+
+//         Todo.findById(hexId).then((todo) => {
+//             expect(todo).toNotExist();
+//             done();
+//         }).catch((e) => done(e));
+
+//         });
+//       });
+//     });
+// });
+// });
